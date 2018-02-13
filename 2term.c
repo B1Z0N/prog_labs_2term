@@ -1,4 +1,6 @@
 #include <stdio.h>
+//Cause there are a lot of libraries that i`ll need to work with
+//I`ll probably make this as different files
 void lab1();
 void lab2();
 void lab3();
