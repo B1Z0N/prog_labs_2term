@@ -1,26 +1,4 @@
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
-
-#define LAB1 80
-#define LAB2 40
-
-typedef struct university_notes {//for second lab
-    char fac[LAB2][LAB2];
-    char spec[LAB2][LAB2];
-    int am;
-} unotes;
-
-void lab1();
-void lab2();
-void lab3();
-void lab4();
-void lab5();
-unotes *init_unote();
-void show_un(unotes * un);
-void sort_un(unotes * un);
-void sort_un(unotes * un);
-void read_data(unotes *un);
+#include "2term.h"
 
 int main() {
     int choice;
@@ -44,61 +22,59 @@ int main() {
 
     return (0);
 }
-unotes *init_unote() {
-    unotes *temp = (unotes *) malloc(sizeof(unotes));
-    temp->am = -1;
+unote *init_unote() {
+    unote *temp = (unote *) malloc(sizeof(unote));
 
     return(temp);
 }
-void read_data(unotes *un) {
+int read_data(unote *un[]) {
     FILE* f;
-
+    int length = -1;
     if((f = fopen("2ndfac.txt", "r")) == NULL) {
         fprintf(stderr,"Error reading 1st file");
-        return;
+        exit(-1);
     }
-    while(!feof(f) && un->am < LAB2) {
-        un->am++;
-        fgets(un->fac[un->am], LAB2, f);
+    while(!feof(f) && length < LAB2) {
+        length++;
+        fgets(un[length]->fac, LAB2, f);
     }
     fclose(f);
 
     if((f = fopen("2ndspec.txt", "r")) == NULL) {
         fprintf(stderr,"Error reading 2nd file");
-        return;
+        exit(-1);
     }
     int i = -1;
-    while(!feof(f) && i <= un->am) {
+    while(!feof(f) && i < length) {
         i++;
-        fgets(un->spec[i], LAB2, f);
+        fgets(un[i]->spec, LAB2, f);
     }
     fclose(f);
-    un->am--;
+
+    return(length - 1);
 }
-void sort_un(unotes * un) {
-    for(int k = 0; k < un->am; k++) {
-        int small = k;
-        for(int i = k; i < un->am; i++) {
-            if(strcmp(un->fac[i], un->fac[i+1]) > 0)
-              small = i + 1;
-        }
-        if(small != k) {
-        char temp[LAB2];
+void sort_un(unote * un[], int length) {
+    char temp1[LAB2];
+    int temp2;
+    for(int i = 0; i < length; i++) {
+        temp2 = i;
+        for(int j = i + 1; j <= length; j++)
+            if(strcmp(un[temp2]->fac, un[j]->fac) > 0) 
+                temp2 = j; 
+        
+        strcpy(temp1, un[temp2]->fac);
+        strcpy(un[temp2]->fac, un[i]->fac);
+        strcpy(un[i]->fac, temp1);
 
-        strcpy(temp, un->fac[k]);
-        strcpy(un->fac[k], un->fac[small]);
-        strcpy(un->fac[small], temp);
-
-        strcpy(temp, un->spec[k]);
-        strcpy(un->spec[k], un->spec[small]);
-        strcpy(un->spec[small], temp);
-      }
+        strcpy(temp1, un[temp2]->spec);
+        strcpy(un[temp2]->spec, un[i]->spec);
+        strcpy(un[i]->spec, temp1);
     }
 }
-void show_un(unotes * un) {
-    for(int i = 0; i <= un->am; i++) {
-        printf("%d|%s", i + 1, un->fac[i]);
-        printf("    %s\n", un->spec[i]);
+void show_un(unote * un[], int length) {
+    for(int i = 0; i <= length; i++) {
+        printf("%d|%s", i + 1, un[i]->fac);
+        printf("    %s\n", un[i]->spec);
     }
 }
 void lab1() {
@@ -124,32 +100,37 @@ void lab1() {
     fclose(f);
 }
 void lab2() {
-    unotes * un = init_unote();
+    unote *un[LAB2];
+    for(int i = 0; i < LAB2; i++)
+        un[i] = init_unote();
+
     char str[LAB2];
+    int i = read_data(un);
 
-    read_data(un);
     printf("First condition\n");
+    show_un(un, i);
 
-    show_un(un);
     while(1) {
       fflush(stdin);
-      printf("Enter faculty, to stop - '6'\n");
 
+      printf("Enter faculty, to stop - '6'\n");
       fgets(str, LAB2, stdin);
       if(str[0] == '6') break;
-      strcpy(un->fac[un->am + 1], str);
+      strcpy(un[i + 1]->fac, str);
 
       printf("Enter speciality\n");
       fgets(str, LAB2, stdin);
-      strcpy(un->spec[un->am + 1], str);
+      strcpy(un[i + 1]->spec, str);
 
-      un->am++;
+      i++;
     }
-
-    sort_un(un);
+    printf("%d\n", i);
+    sort_un(un, i);
     printf("Second condition\n");
-    show_un(un);
-    free(un);
+    show_un(un, i);
+
+    for(int s = 0; s <= i; s++)
+        free(un[s]);
   }
 void lab3() {
 
