@@ -47,10 +47,9 @@ void lab1() {
     }
     fclose(f);
 }
+//second lab
 void lab2() {
     unote *un[LAB2];
-    for(int i = 0; i < LAB2; i++)
-        un[i] = init_unote();
 
     char str[LAB2];
     int i = read_data(un);
@@ -64,6 +63,7 @@ void lab2() {
       printf("Enter faculty, to stop - '6'\n");
       fgets(str, LAB2, stdin);
       if(str[0] == '6') break;
+      un[i + 1] = init_unote();
       strcpy(un[i + 1]->fac, str);
 
       printf("Enter speciality\n");
@@ -80,9 +80,6 @@ void lab2() {
     for(int s = 0; s <= i; s++)
         free(un[s]);
   }
-
-//second lab
-
 unote *init_unote() {
     unote *temp = (unote *) malloc(sizeof(unote));
 
@@ -97,6 +94,7 @@ int read_data(unote *un[]) {
     }
     while(!feof(f) && length < LAB2) {
         length++;
+        un[length] = init_unote();
         fgets(un[length]->fac, LAB2, f);
     }
     fclose(f);
