@@ -2,22 +2,12 @@
 
 int main() {
     int choice;
+    void (*labs[]) () = {lab1, lab2, lab3, lab4, lab5};
     while(1) {
         printf("Choose the lab you`d like to review. Enter '6' to stop.\n");
         scanf("%d", &choice);
-        switch (choice) {
-            case 1: lab1();
-                break;
-            case 2: lab2();
-                break;
-            case 3: lab3();
-                break;
-            case 4: lab4();
-                break;
-            case 5: lab5();
-                break;
-            default: return (0);
-        }
+        if(choice == 6) break;
+        labs[choice - 1]();
     }
 
     return (0);
