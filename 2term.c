@@ -1,7 +1,8 @@
 #include "2term.h"
-
-int main() {
+char *cmd;
+int main(int argc, char argv[]) {
     int choice;
+    cmd = &argv[1];
     void (*labs[]) () = {lab1, lab2, lab3, lab4, lab5};
     while(1) {
         printf("Choose the lab you`d like to review. Enter '6' to stop.\n");
@@ -130,13 +131,35 @@ void show_un(unote * un[], int length) {
 //third lab
 
 void lab3() {
-
+    #ifndef _WIN32
+    pid_t pid = fork();
+    if(pid == 0) {
+        if(exec(OGLpath1, OGLpath1, NULL) == -1) 
+            printf("Error loading 3rd lab!\n");
+    }
+    #else
+    STARTUPINFO info={sizeof(info)};
+    PROCESS_INFORMATION processInfo;
+    if (!CreateProcess(OGLpath1, cmd, NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
+            printf("Error loading 3rd lab!\n");
+    #endif
 }
 
 //fourth lab
 
 void lab4() {
-
+    #ifndef _WIN32
+    pid_t pid = fork();
+    if(pid == 0) {
+        if(exec(OGLpath2, OGLpath2, NULL) == -1) 
+            printf("Error loading 3rd lab!\n");
+    }
+    #else
+    STARTUPINFO info={sizeof(info)};
+    PROCESS_INFORMATION processInfo;
+    if (!CreateProcess(OGLpath2, cmd, NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
+            printf("Error loading 3rd lab!\n");
+    #endif
 }
 
 //fifth lab

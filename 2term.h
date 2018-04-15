@@ -2,8 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-//first lab
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
 
+//first lab
+#define OGLpath1 "ogl2/openGL.exe"
+#define OGLpath2 "ogl1/openGL.exe"
 #define LAB1 80
 
 void lab1();
